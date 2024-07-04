@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Poker Ledger</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file -->
+    <script src="client.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">By Ken Wu</h1>
+        <form id="myForm">
+            <div class="form-group">
+                <label for="numPlayers">Number of Players</label>
+                <input type="number" class="form-control" id="numPlayers" placeholder="Enter the number of players">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="addPlayers()">Submit</button>
+            <div id="players"></div>
+            <button type="button" class="btn btn-success mt-3" onclick="calculate()">Calculate</button>
+            <!-- Add this line -->
+            <button type="button" class="btn btn-info mt-3" onclick="sendMail()">Send Email</button>
+        </form>
+        <div id="results" class="mt-4"></div>
+    </div>
+</body>
+</html>
