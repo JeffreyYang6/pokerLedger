@@ -5,28 +5,6 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-let transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'pokerledgerapp@gmail.com',
-    pass: 'PASSWORD'
-  }
-});
-
-let mailOptions = {
-  from: 'pokerledgerapp@gmail.com',
-  to: 'ken.wu4314@gmail.com',
-  subject: 'Automated Email',
-  text: 'Hello, this is an automated email!'
-};
-
-transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Email sent: ' + info.response);
-  }
-});
 
 
 function question(query) {
@@ -118,6 +96,29 @@ function settle_balances(balances) {
     return transactions;
 }
 
+
+async function sendEmail(to, subject, text) {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'pokerledgerapp@gmail.com',
+            pass: 'PASSWORD'
+        }
+    });
+
+    let mailOptions = {
+        from: '@gmail.com',
+        to: to,
+        subject: subject,
+        text: text
+    };
+
+    let info = await transporter.sendMail(mailOptions);
+
+    console.log('Email sent: ' + info.response);
+}
+
+
 async function calculate() {
     let numPlayers = document.getElementById('numPlayers').value;
     let player_names = [];
@@ -136,29 +137,30 @@ async function calculate() {
     let balances = calculate_balances(amounts_in, amounts_out);
     let transactions = settle_balances(balances);
 
-    // Display the results on the webpage
-    let resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = ''; // Clear the div
-
-    let settlementsHeader = document.createElement('h2');
-    settlementsHeader.textContent = "Settlements:";
-    resultsDiv.appendChild(settlementsHeader);
+    // Clear the table body
+    let tableBody = document.querySelector('#settlements tbody');
+    tableBody.innerHTML = '';
 
     for (let [payer, payee, amount] of transactions) {
-        let settlementDiv = document.createElement('div');
-        settlementDiv.textContent = `${payer} owes ${payee} $${amount.toFixed(2)}`;
-        resultsDiv.appendChild(settlementDiv);
+        let row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${payer}</td>
+            <td>${payee}</td>
+            <td>$${amount.toFixed(2)}</td>
+        `;
+        tableBody.appendChild(row);
     }
 
     // Check if there are any unaccounted expenses
     let unaccounted_expenses = Object.values(balances).reduce((a, b) => a + b, 0);
     if (unaccounted_expenses != 0) {
         let warningDiv = document.createElement('div');
-        warningDiv.style.color = 'red';
+        warningDiv.className = 'alert alert-warning';
         warningDiv.textContent = `Unaccounted expenses: $${unaccounted_expenses.toFixed(2)}`;
-        resultsDiv.appendChild(warningDiv);
+        document.getElementById('results').appendChild(warningDiv);
     }
 }
+
 
 async function main() {
     let num_players = parseInt(await question("Enter the number of players: "));

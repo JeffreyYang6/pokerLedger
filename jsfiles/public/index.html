@@ -20,7 +20,28 @@
             <!-- Add this line -->
             <button type="button" class="btn btn-info mt-3" onclick="sendMail()">Send Email</button>
         </form>
-        <div id="results" class="mt-4"></div>
+        <div id="results" class="mt-4">
+            <h2>Settlements:</h2>
+            <table id="settlements" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Payer</th>
+                        <th scope="col">Payee</th>
+                        <th scope="col">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Settlements will be added here -->
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary" onclick="copySettlements()">Copy Settlements</button>
+        </div>
     </div>
+    <script>
+        function copySettlements() {
+            let settlements = document.getElementById('settlements').innerText;
+            navigator.clipboard.writeText(settlements);
+        }
+    </script>
 </body>
 </html>

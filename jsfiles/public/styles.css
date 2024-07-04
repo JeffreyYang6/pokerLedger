@@ -46,8 +46,15 @@
   }
 }
   
+html, body {
+    height: 120%;
+    overflow-y: scroll;
+  }
+
 /* Main styles */
 body {
+    height: 100%;
+    overflow-y: scroll;
   margin-top: 13.5rem;
   color: #242424;
   font: 1200 16px/1.5 exo, ubuntu, "segoe ui", helvetica, arial, sans-serif;
