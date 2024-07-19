@@ -1,6 +1,5 @@
 # Import necessary libraries
 import streamlit as st
-import uuid
 
 def get_player_names(num_players):
     """
@@ -8,7 +7,7 @@ def get_player_names(num_players):
     """
     player_names = []
     for i in range(num_players):
-        name = st.text_input(f"Enter name of player {i+1}:")
+        name = st.text_input(f"Enter name of player {i+1}:", key=f"player_name_{i}")
         player_names.append(name)
     return player_names
 
@@ -17,8 +16,8 @@ def get_amounts_in(player_names):
     Get the amounts in for each player.
     """
     amounts_in = {}
-    for name in player_names:
-        in_amount = st.number_input(f"Enter amount in for {name}:", value=0.0, step=1.0, key = uuid.uuid4())
+    for i, name in enumerate(player_names):
+        in_amount = st.number_input(f"Enter amount in for {name}:", value=0.0, step=1.0, key=f"amount_in_{i}")
         amounts_in[name] = in_amount
     return amounts_in
 
@@ -27,8 +26,8 @@ def get_amounts_out(player_names):
     Get the amounts out for each player.
     """
     amounts_out = {}
-    for name in player_names:
-        out_amount = st.number_input(f"Enter amount out for {name}:", value=0.0, step=1.0, key = uuid.uuid4())
+    for i, name in enumerate(player_names):
+        out_amount = st.number_input(f"Enter amount out for {name}:", value=0.0, step=1.0, key=f"amount_out_{i}")
         amounts_out[name] = out_amount
     return amounts_out
 
@@ -80,5 +79,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#run
