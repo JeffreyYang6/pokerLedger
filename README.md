@@ -22,7 +22,7 @@ Expense Balancer is a mobile application that helps users balance their expenses
 6. Press the "Calculate" button to calculate the balances and determine the transactions needed to balance the expenses.
 
 ## Installation
-This app is built with Python and Kivy. To run the app, you'll need to have Python and Kivy installed on your system. Once you have those installed, you can clone this repository and run the app with the following command:
+This app is built with Node.js and express. To run the app use the following command:
 
 ```bash
-python main.py
+node server
