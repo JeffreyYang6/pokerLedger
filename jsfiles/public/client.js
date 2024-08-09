@@ -118,6 +118,24 @@ function settle_balances(balances) {
     return transactions;
 }
 
+async function sendEmailsToServer(emails) {
+    try {
+        const response = await axios.post('/emails', emails);
+        console.log(response.status);
+    } catch (error) {
+        console.error('Error sending emails to server', error);
+    }
+}
+
+async function sendAmountsToServer(amounts) {
+    try {
+        const response = await axios.post('/amounts', amounts);
+        console.log(response.status);
+    } catch (error) {
+        console.error('Error sending emails to server', error);
+    }
+}
+
 async function calculate() {
     let numPlayers = document.getElementById('numPlayers').value;
     let player_names = [];
@@ -133,30 +151,43 @@ async function calculate() {
         emails[name] = document.getElementById(`email${i}`).value;
     }
 
+    console.log("Player Names: ", player_names);
+    console.log("Amounts In: ", amounts_in);
+    console.log("Amounts Out: ", amounts_out);
+    console.log("Emails: ", emails);
+
     let balances = calculate_balances(amounts_in, amounts_out);
     let transactions = settle_balances(balances);
+
+    console.log(transactions)
 
     // Display the results on the webpage
     let resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = ''; // Clear the div
-
+    
     let settlementsHeader = document.createElement('h2');
     settlementsHeader.textContent = "Settlements:";
     resultsDiv.appendChild(settlementsHeader);
-
+    
     for (let [payer, payee, amount] of transactions) {
         let settlementDiv = document.createElement('div');
         settlementDiv.textContent = `${payer} owes ${payee} $${amount.toFixed(2)}`;
         resultsDiv.appendChild(settlementDiv);
     }
-
+    
     // Check if there are any unaccounted expenses
+    let unaccountedBool = false
     let unaccounted_expenses = Object.values(balances).reduce((a, b) => a + b, 0);
     if (unaccounted_expenses != 0) {
+        unaccountedBool = true
         let warningDiv = document.createElement('div');
         warningDiv.style.color = 'red';
         warningDiv.textContent = `Unaccounted expenses: $${unaccounted_expenses.toFixed(2)}`;
         resultsDiv.appendChild(warningDiv);
+    }
+    if (!unaccountedBool) {
+        sendEmailsToServer(emails);
+        sendAmountsToServer(amounts_out);
     }
 }
 
